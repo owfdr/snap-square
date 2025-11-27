@@ -58,10 +58,17 @@ def process_folder(folder_path):
 
 # Run when executed directly
 if __name__ == '__main__':
-    # Check if input provided
+    # If no input provided, default to executable/script directory
     if len(sys.argv) < 2:
-        print("Usage: python square-snap.py input_image_or_folder [output_image]")
-        print("       If input is a folder, all images in the folder will be processed")
+        # Get the directory where the executable or script is located
+        if getattr(sys, 'frozen', False):
+            # Running as PyInstaller executable
+            base_dir = os.path.dirname(sys.executable)
+        else:
+            # Running as Python script
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+        print(f"No argument provided. Processing images in: {base_dir}")
+        process_folder(base_dir)
     else:
         # Get input path
         input_path = sys.argv[1]
